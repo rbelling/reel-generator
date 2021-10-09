@@ -1,0 +1,22 @@
+
+# dependencies
+/node_modules
+
+# build
+/build/
+
+# misc
+.DS_Store
+.env*
+
+# debug
+npm-debug.log*
+
+.nyc_output
+coverage
+
+production.env
+
+package-lock.json
+
+.idea
