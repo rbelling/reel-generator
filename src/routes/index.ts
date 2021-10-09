@@ -1,14 +1,14 @@
 import { NowRequestHandler } from "fastify-now"
 import S from "fluent-json-schema"
 
-export const GET: NowRequestHandler = async function () {
-  return { hello: "world" }
+export const GET: NowRequestHandler = async function (req, reply) {
+  return reply.sendFile("/index.html")
 }
 
 GET.opts = {
   schema: {
     response: {
-      200: S.object().prop("hello", S.string().required()),
+      200: S.object(),
     },
   },
 }

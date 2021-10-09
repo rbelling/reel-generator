@@ -2,6 +2,7 @@ import path from "path"
 
 import fastify from "fastify"
 import now from "fastify-now"
+import fastifyStatic from "fastify-static"
 
 // Load env vars
 import loadConfig from "@lib/config"
@@ -16,6 +17,10 @@ export async function createServer() {
 
   server.register(now, {
     routesFolder: path.join(__dirname, "./routes"),
+  })
+
+  server.register(fastifyStatic, {
+    root: path.join(__dirname, "../public"),
   })
 
   await server.ready()

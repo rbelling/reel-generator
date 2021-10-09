@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { createServer } from "../index"
+import { createServer } from "../../index"
 
 describe("GET /", () => {
   let server: FastifyInstance
@@ -11,11 +11,12 @@ describe("GET /", () => {
     await server.close()
   })
 
-  it("Should return index.html", async () => {
+  it("Should return hello world", async () => {
     const response = await server.inject({
       method: "GET",
-      path: "/",
+      path: "/health",
     })
     expect(response.statusCode).toBe(200)
+    expect(response.json()).toEqual({ hello: "world" })
   })
 })
