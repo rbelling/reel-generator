@@ -7,9 +7,9 @@
   </head>
   <body class="flex items-start justify-center min-h-screen">
     <main class="p-10 mt-20 border-green-100 border-2">
-      <form action="/create-reel" method="POST">
+      <form id="upload-pics" action="/create-reel" method="post" enctype="multipart/form-data">
         <label for="pics" class="mr-10 font-serif">Add your favorite pics to the Reel!</label>
-        <input type="file" id="pics" name="pics" accept="image/png, image/jpeg" />
+        <input type="file" id="pics" name="pics" accept="image/*" required multiple />
         <br />
         <button
           class="border-green-600 text-green-600 border-2 mt-4 px-3 py-2 ml-auto"

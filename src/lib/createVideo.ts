@@ -12,8 +12,7 @@ export type IVideoConfig = {
 }
 
 export type CommandOptions = {
-  stepsCount: number
-  inputFiles: string | stream.Readable
+  inputFiles: Array<string | stream.Readable>
   outputPath: string
 }
 
@@ -27,10 +26,10 @@ export const instagramReelConfig: IVideoConfig = Object.freeze({
 
 // Calculates the duration in seconds of how long each provided frame should be displayed for
 export const getFrameDuration = (
-  stepsCount: number,
+  framesCount: number,
   cfg: Pick<IVideoConfig, "desiredLength"> = instagramReelConfig,
 ): number => {
-  return cfg.desiredLength / 1000 / stepsCount
+  return cfg.desiredLength / 1000 / framesCount
 }
 
 export const createVideo = async (opts: CommandOptions): Promise<void> => {
@@ -41,18 +40,20 @@ export const createVideo = async (opts: CommandOptions): Promise<void> => {
       resolve()
     }
 
-    ffmpeg()
+    const command = opts.inputFiles.reduce((seq, cur) => seq.addInput(cur), ffmpeg())
+
+    command
       .on("error", (e) => {
         console.timeEnd("create-video")
         console.error(e)
         reject()
       })
       .on("end", onSuccess)
-      .input(opts.inputFiles)
-      .inputFPS(1 / getFrameDuration(opts.stepsCount))
+      // .inputFPS(1 / getFrameDuration(opts.inputFiles.length))
+      // .inputFPS(1 / 5)
       .output(opts.outputPath)
-      .outputFPS(instagramReelConfig.fps)
-      .noAudio()
+      // .outputFPS(instagramReelConfig.fps)
+      // .noAudio()
       .run()
   })
 }

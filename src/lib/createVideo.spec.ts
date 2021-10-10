@@ -2,8 +2,13 @@ import { CommandOptions, createVideo, getFrameDuration, instagramReelConfig } fr
 import path from "path"
 
 const sampleConfig: CommandOptions = {
-  stepsCount: 5,
-  inputFiles: path.join(__dirname, "../../", "public", "samples", "sample_%03d.jpg"),
+  inputFiles: [
+    path.join(__dirname, "../../", "public", "samples", "sample_002.jpg"),
+    path.join(__dirname, "../../", "public", "samples", "sample_004.jpg"),
+    path.join(__dirname, "../../", "public", "samples", "sample_005.jpg"),
+    path.join(__dirname, "../../", "public", "samples", "sample_001.jpg"),
+    path.join(__dirname, "../../", "public", "samples", "sample_003.jpg"),
+  ],
   outputPath: path.join(__dirname, "../../", "public", "samples", "video.mp4"),
 }
 
