@@ -3,6 +3,7 @@ import path from "path"
 import fastify from "fastify"
 import now from "fastify-now"
 import fastifyStatic from "fastify-static"
+import fastifyMultipart from "fastify-multipart"
 
 // Load env vars
 import loadConfig from "@lib/config"
@@ -22,6 +23,8 @@ export async function createServer() {
   server.register(fastifyStatic, {
     root: path.join(__dirname, "../public"),
   })
+
+  server.register(fastifyMultipart)
 
   await server.ready()
   return server

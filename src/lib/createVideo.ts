@@ -1,10 +1,23 @@
 import ffmpegExecutable from "@ffmpeg-installer/ffmpeg"
 import ffmpeg from "fluent-ffmpeg"
-import path from "path"
+import stream from "stream"
 
 ffmpeg.setFfmpegPath(ffmpegExecutable.path)
 
-const VideoConfig = Object.freeze({
+export type IVideoConfig = {
+  desiredLength: number
+  fps: number
+  height: number
+  width: number
+}
+
+export type CommandOptions = {
+  stepsCount: number
+  inputFiles: string | stream.Readable
+  outputPath: string
+}
+
+export const instagramReelConfig: IVideoConfig = Object.freeze({
   // Duration expressed in milliseconds
   desiredLength: 30000,
   fps: 25,
@@ -14,20 +27,32 @@ const VideoConfig = Object.freeze({
 
 // Calculates the duration in seconds of how long each provided frame should be displayed for
 export const getFrameDuration = (
-  inputFrames: number,
-  cfg: Pick<typeof VideoConfig, "desiredLength"> = VideoConfig,
+  stepsCount: number,
+  cfg: Pick<IVideoConfig, "desiredLength"> = instagramReelConfig,
 ): number => {
-  return cfg.desiredLength / 1000 / inputFrames
+  return cfg.desiredLength / 1000 / stepsCount
 }
 
-export async function createVideo(inputFrames: number): Promise<void> {
-  const onError = (_: string) => console.error(`Error: ${_}`)
-  return ffmpeg()
-    .on("error", onError)
-    .input(path.join(__dirname, "../../", "public", "samples", "sample_%03d.jpg"))
-    .inputFPS(1 / getFrameDuration(inputFrames))
-    .output(path.join(__dirname, "../../", "public", "samples", "video.mp4"))
-    .outputFPS(VideoConfig.fps)
-    .noAudio()
-    .run()
+export const createVideo = async (opts: CommandOptions): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    console.time("create-video")
+    const onSuccess = () => {
+      console.timeEnd("create-video")
+      resolve()
+    }
+
+    ffmpeg()
+      .on("error", (e) => {
+        console.timeEnd("create-video")
+        console.error(e)
+        reject()
+      })
+      .on("end", onSuccess)
+      .input(opts.inputFiles)
+      .inputFPS(1 / getFrameDuration(opts.stepsCount))
+      .output(opts.outputPath)
+      .outputFPS(instagramReelConfig.fps)
+      .noAudio()
+      .run()
+  })
 }

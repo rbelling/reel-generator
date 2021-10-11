@@ -3,7 +3,7 @@ import S from "fluent-json-schema"
 import { createVideo } from "@lib/createVideo"
 
 export const GET: NowRequestHandler = async function (req, reply) {
-  return createVideo(3)
+  // return createVideo(3)
 }
 
 GET.opts = {

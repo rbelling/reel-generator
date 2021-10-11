@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Reel Generator</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
-    <h1 class="text-blue-500 m-10">Hello World!</h1>
-</body>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+  </head>
+  <body class="flex items-start justify-center min-h-screen">
+    <main class="p-10 mt-20 border-green-100 border-2">
+      <form action="/create-reel" method="POST">
+        <label for="pics" class="mr-10 font-serif">Add your favorite pics to the Reel!</label>
+        <input type="file" id="pics" name="pics" accept="image/png, image/jpeg" />
+        <br />
+        <button
+          class="border-green-600 text-green-600 border-2 mt-4 px-3 py-2 ml-auto"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </main>
+  </body>
 </html>
