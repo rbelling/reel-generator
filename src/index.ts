@@ -6,7 +6,7 @@ import fastifyStatic from "fastify-static"
 import fastifyMultipart from "fastify-multipart"
 
 // Load env vars
-import loadConfig from "@lib/config"
+import loadConfig from "./lib/config"
 loadConfig()
 
 export async function createServer() {

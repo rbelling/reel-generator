@@ -8,13 +8,10 @@
     "incremental": true,
     "noImplicitAny": false,
     "moduleResolution": "node",
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "build",
-    "baseUrl": "src",
-    "paths": {
-      "@lib/*": ["lib/*"]
-    }
+    "baseUrl": "src"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
