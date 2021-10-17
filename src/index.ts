@@ -2,7 +2,6 @@ import path from "path"
 
 import fastify from "fastify"
 import fastifyStatic from "fastify-static"
-import fastifyMultipart from "fastify-multipart"
 
 // Load env vars
 import loadConfig from "./lib/config"
@@ -19,10 +18,6 @@ export async function createServer() {
     root: path.join(__dirname, "../public"),
   })
 
-  // TODO check if we need this plugin or not
-  server.register(fastifyMultipart)
-
-  // ROUTES
   server.get("/", async function (req, reply) {
     return reply.sendFile("/index.html")
   })
