@@ -1,7 +1,6 @@
 import path from "path"
 
 import fastify from "fastify"
-import now from "fastify-now"
 import fastifyStatic from "fastify-static"
 import fastifyMultipart from "fastify-multipart"
 
@@ -16,15 +15,21 @@ export async function createServer() {
     },
   })
 
-  server.register(now, {
-    routesFolder: path.join(__dirname, "./routes"),
-  })
-
   server.register(fastifyStatic, {
     root: path.join(__dirname, "../public"),
   })
 
+  // TODO check if we need this plugin or not
   server.register(fastifyMultipart)
+
+  // ROUTES
+  server.get("/", async function (req, reply) {
+    return reply.sendFile("/index.html")
+  })
+
+  server.post("/create-reel", async function (req, reply) {
+    return reply.status(200)
+  })
 
   await server.ready()
   return server
