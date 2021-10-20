@@ -2,7 +2,7 @@ import { createServer } from "../src"
 import { FastifyInstance } from "fastify"
 import request from "supertest"
 import axios from "axios"
-import { fetchImages } from "../src/lib/createVideo"
+import { getReadableStreamFromUrls } from "../src/lib/createVideo"
 
 describe("Server", () => {
   it("Should return server instance", async () => {
@@ -31,7 +31,7 @@ describe("Routes", () => {
     jest.doMock("axios")
     axios.get = jest.fn()
     const imageUrls = ["a.jpg", "b.png"]
-    await fetchImages(imageUrls)
+    await getReadableStreamFromUrls(imageUrls)
 
     expect(axios.get).toHaveBeenCalledTimes(imageUrls.length)
     ;(axios.get as any).mockClear()

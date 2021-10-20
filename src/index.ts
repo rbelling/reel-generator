@@ -1,10 +1,12 @@
-import path from "path"
-
+import axios from "axios"
 import fastify from "fastify"
 import fastifyStatic from "fastify-static"
+import path from "path"
 
 // Load env vars
 import loadConfig from "./lib/config"
+import { createVideo, getReadableStreamFromUrls, instagramReelConfig } from "./lib/createVideo"
+
 loadConfig()
 
 export async function createServer() {
@@ -23,6 +25,16 @@ export async function createServer() {
   })
 
   server.post("/create-reel", async function (req, reply) {
+    const urls = (req.body as { urls: Array<string> }).urls
+
+    await createVideo(
+      {
+        config: instagramReelConfig,
+        outputPath: path.join(__dirname, "../../", "public", "samples", "video.mp4"),
+      },
+      urls,
+    )
+
     return reply.status(200)
   })
 
