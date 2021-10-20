@@ -1,8 +1,8 @@
-import { createServer } from "./index"
+import { createServer } from "../src"
 import { FastifyInstance } from "fastify"
 import request from "supertest"
 import axios from "axios"
-import { fetchImages } from "./lib/createVideo"
+import { fetchImages } from "../src/lib/createVideo"
 
 describe("Server", () => {
   it("Should return server instance", async () => {
