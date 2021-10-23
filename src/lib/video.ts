@@ -1,7 +1,6 @@
-import axios, { AxiosResponse } from "axios"
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import ffmpegExecutable from "@ffmpeg-installer/ffmpeg"
-import { Readable } from "stream"
+import { saveToTempFolder } from "./storage"
 
 ffmpeg.setFfmpegPath(ffmpegExecutable.path)
 
@@ -34,39 +33,22 @@ export const getImageDuration = (
   return cfg.desiredLength / 1000 / imagesCount
 }
 
-function getFfmpegCommand(opts: FfmpegConfig, input: Readable): FfmpegCommand {
+function getFfmpegCommand(opts: FfmpegConfig, inputRegex: string): FfmpegCommand {
   return ffmpeg()
-    .input(input)
+    .input(inputRegex)
     .inputFPS(1 / getImageDuration(opts.imagesCount))
     .output(opts.outputPath)
     .outputFPS(opts.config.fps)
     .noAudio()
 }
 
-// TODO change to : Promise<Readable>
-export const getReadableStreamFromUrls = async (urls: Array<string>): Promise<any> => {
-  /**
-   * @see https://github.com/axios/axios#axiosconfig
-   */
-  const images = await Promise.all(
-    urls.map((url) =>
-      axios.get(url, {
-        responseType: "stream",
-      }),
-    ),
-  )
-  // return images.map(({ data }: AxiosResponse) => data)
-  return images;
-}
-
-export const createVideo = async (
+export const render = async (
   opts: Omit<FfmpegConfig, "input" | "imagesCount">,
   urls: Array<string>,
 ): Promise<void> => {
-  // TODO see if we can use async await throughout the function
   return new Promise(async (resolve, reject) => {
     try {
-      const images = await getReadableStreamFromUrls(urls)
+      const images = await saveToTempFolder(urls)
       const command = getFfmpegCommand({ ...opts, imagesCount: urls.length }, images)
 
       console.time("create-video")

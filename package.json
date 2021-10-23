@@ -14,7 +14,7 @@
     "test:types": "tsc --noEmit",
     "test:coverage": "npm run test:unit -- --coverage",
     "test:watch": "npm run test:unit -- --watch --verbose",
-    "test:create-video": "ts-node test/createTestVideo.ts"
+    "test:create-video": "ts-node scripts/createVideo.ts"
   },
   "repository": {
     "type": "git",

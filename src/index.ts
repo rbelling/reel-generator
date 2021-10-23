@@ -5,7 +5,8 @@ import path from "path"
 
 // Load env vars
 import loadConfig from "./lib/config"
-import { createVideo, getReadableStreamFromUrls, instagramReelConfig } from "./lib/createVideo"
+import { render, instagramReelConfig } from "./lib/video"
+import { saveToTempFolder } from "./lib/storage"
 
 loadConfig()
 
@@ -27,7 +28,7 @@ export async function createServer() {
   server.post("/create-reel", async function (req, reply) {
     const urls = (req.body as { urls: Array<string> }).urls
 
-    await createVideo(
+    await render(
       {
         config: instagramReelConfig,
         outputPath: path.join(__dirname, "../../", "public", "samples", "video.mp4"),
