@@ -20,6 +20,8 @@ const videoOptions = {
   loop: 5, // seconds
   transition: true,
   transitionDuration: 0.35, // seconds
+  /** @see supported colors https://www.ffmpeg.org/ffmpeg-utils.html#Color */
+  transitionColor: "#243746",
   videoBitrate: 1024,
   videoCodec: "libx264",
   size: "1080x?",
