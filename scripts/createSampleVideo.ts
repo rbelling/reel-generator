@@ -3,16 +3,16 @@ import * as path from "path"
 
 const videoshow = require("videoshow")
 
-const images = ["image-001.jpeg"].map((_) => path.join(mediaFolder, "images", _))
+const images = ["image-001.jpeg", "image-001.jpeg"].map((_) => path.join(mediaFolder, "images", _))
 
 const videoOptions = {
   fps: 25,
   loop: 5, // seconds
   transition: true,
-  transitionDuration: 1, // seconds
+  transitionDuration: 0.35, // seconds
   videoBitrate: 1024,
   videoCodec: "libx264",
-  size: "640x?",
+  size: "1080x?",
   audioBitrate: "128k",
   audioChannels: 2,
   format: "mp4",
