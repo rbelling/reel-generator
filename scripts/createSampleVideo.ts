@@ -20,7 +20,7 @@ const videoOptions = {
 }
 
 videoshow(images, videoOptions)
-  // .audio(path.join(mediaFolder, "music/bensound-jazzyfrenchy.mp3"))
+  .audio(path.join(mediaFolder, "music/bensound-jazzyfrenchy.mp3"))
   .save(path.join(mediaFolder, "generated/video.mp4"))
   .on("start", function (command) {
     console.log("ffmpeg process started:", command)
