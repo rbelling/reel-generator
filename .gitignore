@@ -22,4 +22,4 @@ package-lock.json
 .idea
 
 # Generated stuff, artifacts
-media/downloads/*
+media/images/downloads/*
