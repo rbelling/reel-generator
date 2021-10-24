@@ -12,7 +12,7 @@ const images = [
   // "image-006.jpeg",
   // "image-007.png",
   // "image-008.png",
-  "image-009.jpeg",
+  "image-001.jpeg",
 ].map((_) => path.join(mediaFolder, "images", _))
 
 const videoOptions = {
@@ -24,7 +24,8 @@ const videoOptions = {
   transitionColor: "#243746",
   videoBitrate: 1024,
   videoCodec: "libx264",
-  size: "1080x?",
+  size: "1080x1920",
+  autopad: "#243746",
   audioBitrate: "128k",
   audioChannels: 2,
   format: "mp4",
