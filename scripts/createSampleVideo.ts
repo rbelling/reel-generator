@@ -1,34 +1,54 @@
-import { downloadToTempFolder, mediaFolder } from "../src/lib/network"
+import { mediaFolder } from "../src/lib/network"
 import * as path from "path"
-import { instagramReelConfig, render } from "../src/lib/video"
 
-downloadToTempFolder({
-  imageUrls: [
-    // "https://cdn.spoak.com/images/dc379d06-1446-445d-a6b5-141fa24de801",
-    "https://spoak.imgix.net/https%3A%2F%2Fdnwdt2n2p011ycoep3azqyo4-wpengine.netdna-ssl.com%2Fwp-content%2Fuploads%2F2019%2F06%2Fathena_calderone_eyeswoon_RH_amagansett_4.jpg?w=600&s=e4ae9f6dda62188dac08fed062c94460",
-    "https://cdn.spoak.com/palette-sample.jpeg",
-    "https://spoak.imgix.net/https%3A%2F%2Fdnwdt2n2p011ycoep3azqyo4-wpengine.netdna-ssl.com%2Fwp-content%2Fuploads%2F2019%2F06%2Fathena_calderone_eyeswoon_RH_amagansett_4.jpg?w=600&s=e4ae9f6dda62188dac08fed062c94460",
-    "https://cdn.spoak.com/palette-sample.jpeg",
-    // "https://spoak.imgix.net/https%3A%2F%2Fcdn.spoak.com%2Fimages%2Fb4f8f691-7c7f-4758-a48f-a7838629c3e0?w=600&s=07b853e7b195d47c09f737d9fa6a0525",
-    // "https://spoak.imgix.net/https%3A%2F%2Fcdn.spoak.com%2Fimages%2F30ceb8d3-0ed9-44e0-9ea1-ce58d4bf5abd?w=600&s=d48aa754c6a06cbde2b9b06207fe1bbf",
-    // "https://cdn.spoak.com/images/18dab76c-179e-4270-a75b-a5647e994ec1",
-    // "https://cdn.spoak.com/card-sample1.png",
-    // "https://cdn.spoak.com/card-sample2.png",
-  ],
-})
-  .then(({ paths, folder }) => {
-    console.info(`✅  Downloaded ${paths.length} images to ${folder}`)
-    return render(folder, {
-      soundtrack: path.join(mediaFolder, "music", "background-music-1.wav"),
-      config: instagramReelConfig,
-      imagesCount: paths.length,
-      outputPath: path.join(mediaFolder, "generated", "video.mp4"),
-    })
+const videoshow = require("videoshow")
+
+const images = ["image-001.jpeg"].map((_) => path.join(mediaFolder, "images", _))
+
+const videoOptions = {
+  fps: 25,
+  loop: 5, // seconds
+  transition: true,
+  transitionDuration: 1, // seconds
+  videoBitrate: 1024,
+  videoCodec: "libx264",
+  size: "640x?",
+  audioBitrate: "128k",
+  audioChannels: 2,
+  format: "mp4",
+  pixelFormat: "yuv420p",
+}
+
+videoshow(images, videoOptions)
+  // .audio(path.join(mediaFolder, "music/bensound-jazzyfrenchy.mp3"))
+  .save(path.join(mediaFolder, "generated/video.mp4"))
+  .on("start", function (command) {
+    console.log("ffmpeg process started:", command)
   })
-  .then((outputPath) => {
-    console.info(`✅  Generated video in ${outputPath}`)
+  .on("error", function (err, stdout, stderr) {
+    console.error("Error:", err)
+    console.error("ffmpeg stderr:", stderr)
   })
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
+  .on("end", function (output) {
+    console.error("Video created in:", output)
   })
+//
+// downloadToTempFolder({
+//   imageUrls: [],
+// })
+//   .then(({ paths, folder }) => {
+//     console.info(`✅  Downloaded ${paths.length} images to ${folder}`)
+//     return render(folder, {
+//       soundtrack: path.join(mediaFolder, "music", "background-music-1.wav"),
+//       config: instagramReelConfig,
+//       imagesCount: paths.length,
+//       outputPath: path.join(mediaFolder, "generated", "video.mp4"),
+//     })
+//   })
+//   .then((outputPath) => {
+//     console.info(`✅  Generated video in ${outputPath}`)
+//   })
+//   .catch((e) => {
+//     console.error(e)
+//     process.exit(1)
+//   })

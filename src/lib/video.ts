@@ -1,9 +1,4 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
-import ffmpegExecutable from "@ffmpeg-installer/ffmpeg"
-import path from "path"
-import { SupportedImageExtension } from "./config"
-
-ffmpeg.setFfmpegPath(ffmpegExecutable.path)
 
 export type IVideoConfig = {
   desiredLength: number
