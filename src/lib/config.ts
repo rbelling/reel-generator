@@ -2,6 +2,8 @@ import path from "path"
 import envSchema from "env-schema"
 import S from "fluent-json-schema"
 
+export type SupportedImageExtension = `.jpg` | `.jpeg`
+
 export default function loadConfig(): void {
   const result = require("dotenv").config({
     path: path.join(__dirname, `../../${process.env.NODE_ENV ?? "development"}.env`),

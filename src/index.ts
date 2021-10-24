@@ -1,4 +1,3 @@
-import axios from "axios"
 import fastify from "fastify"
 import fastifyStatic from "fastify-static"
 import path from "path"
@@ -6,7 +5,7 @@ import path from "path"
 // Load env vars
 import loadConfig from "./lib/config"
 import { render, instagramReelConfig } from "./lib/video"
-import { saveToTempFolder } from "./lib/storage"
+import { downloadToTempFolder } from "./lib/network"
 
 loadConfig()
 
@@ -26,15 +25,14 @@ export async function createServer() {
   })
 
   server.post("/create-reel", async function (req, reply) {
-    const urls = (req.body as { urls: Array<string> }).urls
+    const { paths: input } = await downloadToTempFolder({
+      imageUrls: (req.body as { urls: Array<string> }).urls,
+    })
 
-    await render(
-      {
-        config: instagramReelConfig,
-        outputPath: path.join(__dirname, "../../", "public", "samples", "video.mp4"),
-      },
-      urls,
-    )
+    await render(input, {
+      config: instagramReelConfig,
+      outputPath: path.join(__dirname, "../../", "public", "generated", "video.mp4"),
+    })
 
     return reply.status(200)
   })

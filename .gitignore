@@ -20,3 +20,6 @@ production.env
 package-lock.json
 
 .idea
+
+# Generated stuff, artifacts
+media/downloads/*

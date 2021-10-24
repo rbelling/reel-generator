@@ -1,6 +1,6 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import ffmpegExecutable from "@ffmpeg-installer/ffmpeg"
-import { saveToTempFolder } from "./storage"
+import { downloadToTempFolder } from "./network"
 
 ffmpeg.setFfmpegPath(ffmpegExecutable.path)
 
@@ -43,13 +43,13 @@ function getFfmpegCommand(opts: FfmpegConfig, inputRegex: string): FfmpegCommand
 }
 
 export const render = async (
-  opts: Omit<FfmpegConfig, "input" | "imagesCount">,
   urls: Array<string>,
+  config: Omit<FfmpegConfig, "input" | "imagesCount">,
 ): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const images = await saveToTempFolder(urls)
-      const command = getFfmpegCommand({ ...opts, imagesCount: urls.length }, images)
+      const { folder } = await downloadToTempFolder({ imageUrls: urls })
+      const command = getFfmpegCommand({ ...config, imagesCount: urls.length }, folder)
 
       console.time("create-video")
       command
