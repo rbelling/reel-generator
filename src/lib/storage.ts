@@ -3,13 +3,13 @@ import Stream from "stream"
 import { createWriteStream } from "fs"
 import path from "path"
 import { SupportedImageExtension } from "./config"
-import * as stream from "stream"
+import { ffmpegFrameNamePrefix } from "./video"
 
 const finished = promisify(Stream.finished)
 
 export type ISaveToFolder = {
   imageUrls: Array<string>
-  folder?: string
+  folder: string
 }
 
 export async function writeStream(targetPath: string, data: Stream): Promise<void> {
@@ -21,7 +21,7 @@ export async function writeStream(targetPath: string, data: Stream): Promise<voi
   return await finished(writer)
 }
 
-export async function saveToFolder({
+export async function saveImage({
   data,
   extension,
   folder,
@@ -34,7 +34,7 @@ export async function saveToFolder({
 }): Promise<string> {
   const targetPath = path.join(
     folder,
-    `image-${(index + 1).toString().padStart(3, "0")}${extension}`,
+    `${ffmpegFrameNamePrefix}${(index + 1).toString().padStart(3, "0")}${extension}`,
   )
 
   await writeStream(targetPath, data)
@@ -42,4 +42,4 @@ export async function saveToFolder({
   return targetPath
 }
 
-export default saveToFolder
+export default saveImage

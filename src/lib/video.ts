@@ -1,6 +1,7 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import ffmpegExecutable from "@ffmpeg-installer/ffmpeg"
-import { downloadToTempFolder } from "./network"
+import path from "path"
+import { SupportedImageExtension } from "./config"
 
 ffmpeg.setFfmpegPath(ffmpegExecutable.path)
 
@@ -33,23 +34,25 @@ export const getImageDuration = (
   return cfg.desiredLength / 1000 / imagesCount
 }
 
-function getFfmpegCommand(opts: FfmpegConfig, inputRegex: string): FfmpegCommand {
+function getFfmpegCommand(input: string, opts: FfmpegConfig): FfmpegCommand {
   return ffmpeg()
-    .input(inputRegex)
+    .input(input)
     .inputFPS(1 / getImageDuration(opts.imagesCount))
+    .size("800x500")
     .output(opts.outputPath)
     .outputFPS(opts.config.fps)
     .noAudio()
 }
 
+export const ffmpegFrameNamePrefix = `image-`
+
 export const render = async (
-  urls: Array<string>,
-  config: Omit<FfmpegConfig, "input" | "imagesCount">,
-): Promise<void> => {
+  folder: string,
+  config: Omit<FfmpegConfig, "input">,
+): Promise<string> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { folder } = await downloadToTempFolder({ imageUrls: urls })
-      const command = getFfmpegCommand({ ...config, imagesCount: urls.length }, folder)
+      const command = getFfmpegCommand(`${folder}/${ffmpegFrameNamePrefix}%03d.jpg`, config)
 
       console.time("create-video")
       command
@@ -58,7 +61,7 @@ export const render = async (
         })
         .on("end", () => {
           console.timeEnd("create-video")
-          resolve()
+          resolve(config.outputPath)
         })
         .run()
     } catch (e) {

@@ -1,13 +1,17 @@
 import Stream from "stream"
 import { SupportedImageExtension } from "./config"
 import axios from "axios"
+import { ISaveToFolder, saveImage } from "./storage"
 import path from "path"
-import { ISaveToFolder, saveToFolder } from "./storage"
+import * as fs from "fs"
+import { v4 as uuidv4 } from "uuid"
 
 type IDownloadToTempFolderResponse = {
   folder: string
   paths: Array<string>
 }
+
+export const mediaFolder = path.join(__dirname, "../../media")
 
 export async function fetchImageAsStream(
   url,
@@ -26,13 +30,15 @@ export async function fetchImageAsStream(
 
 export async function downloadToTempFolder({
   imageUrls,
-  folder = path.join(__dirname, "media"),
-}: ISaveToFolder): Promise<IDownloadToTempFolderResponse> {
+}: Pick<ISaveToFolder, "imageUrls">): Promise<IDownloadToTempFolderResponse> {
+  const folder = path.join(mediaFolder, "downloads", uuidv4())
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder, "0744")
+  }
   return Promise.all(
     imageUrls.map(async (url, index) => {
       const { data, extension } = await fetchImageAsStream(url)
-
-      const targetPath = await saveToFolder({ data, extension, folder, index })
+      const targetPath = await saveImage({ data, extension, index, folder })
 
       return {
         folder,

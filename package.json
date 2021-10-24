@@ -70,6 +70,7 @@
     "fastify-static": "^4.4.0",
     "fluent-ffmpeg": "^2.1.2",
     "fluent-json-schema": "^2.0.3",
-    "http-errors": "^1.8.0"
+    "http-errors": "^1.8.0",
+    "uuid": "^8.3.2"
   }
 }

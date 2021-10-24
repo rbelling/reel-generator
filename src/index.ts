@@ -5,7 +5,7 @@ import path from "path"
 // Load env vars
 import loadConfig from "./lib/config"
 import { render, instagramReelConfig } from "./lib/video"
-import { downloadToTempFolder } from "./lib/network"
+import { downloadToTempFolder, mediaFolder } from "./lib/network"
 
 loadConfig()
 
@@ -25,13 +25,16 @@ export async function createServer() {
   })
 
   server.post("/create-reel", async function (req, reply) {
-    const { paths: input } = await downloadToTempFolder({
-      imageUrls: (req.body as { urls: Array<string> }).urls,
+    const { urls } = req.body as { urls: Array<string> }
+    const { folder } = await downloadToTempFolder({
+      imageUrls: urls,
     })
 
-    await render(input, {
+    await render(folder, {
       config: instagramReelConfig,
-      outputPath: path.join(__dirname, "../../", "public", "generated", "video.mp4"),
+      imagesCount: urls.length,
+      // TODO save in a temp folder
+      outputPath: path.join(mediaFolder, "generated", "video.mp4"),
     })
 
     return reply.status(200)
