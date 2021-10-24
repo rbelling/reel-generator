@@ -16,12 +16,15 @@ export const mediaFolder = path.join(__dirname, "../../media")
 export async function fetchImageAsStream(
   url,
 ): Promise<{ data: Stream; extension: SupportedImageExtension }> {
-  const { data } = await axios.get<Stream>(url, {
+  const { data, headers } = await axios.get<Stream>(url, {
     responseType: "stream",
   })
 
-  // TODO determine real extension
-  return { data, extension: ".jpg" }
+  const extension: SupportedImageExtension =
+    (headers["content-type"]?.match(/\/(.*)/)[0]?.replace("/", ".") as SupportedImageExtension) ??
+    ".jpg"
+
+  return { data, extension }
 }
 
 /**

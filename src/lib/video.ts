@@ -16,6 +16,7 @@ export type FfmpegConfig = {
   config: IVideoConfig
   imagesCount: number
   outputPath: string
+  soundtrack: string
 }
 
 export const instagramReelConfig: IVideoConfig = Object.freeze({

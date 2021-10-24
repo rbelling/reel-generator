@@ -31,6 +31,7 @@ export async function createServer() {
     })
 
     await render(folder, {
+      soundtrack: path.join(mediaFolder, "music", "background-music-1.wav"),
       config: instagramReelConfig,
       imagesCount: urls.length,
       // TODO save in a temp folder

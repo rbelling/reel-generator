@@ -2,7 +2,7 @@ import path from "path"
 import envSchema from "env-schema"
 import S from "fluent-json-schema"
 
-export type SupportedImageExtension = `.jpg` | `.jpeg`
+export type SupportedImageExtension = `.jpg` | `.jpeg` | ".png"
 
 export default function loadConfig(): void {
   const result = require("dotenv").config({

@@ -19,6 +19,7 @@ downloadToTempFolder({
   .then(({ paths, folder }) => {
     console.info(`✅  Downloaded ${paths.length} images to ${folder}`)
     return render(folder, {
+      soundtrack: path.join(mediaFolder, "music", "background-music-1.wav"),
       config: instagramReelConfig,
       imagesCount: paths.length,
       outputPath: path.join(mediaFolder, "generated", "video.mp4"),
