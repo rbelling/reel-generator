@@ -1,7 +1,7 @@
 import { mediaFolder } from "../src/lib/storage"
 
 import path from "path"
-import {instagramReelConfig, render__wip} from "../src/lib/video"
+import { instagramReelConfig, render } from "../src/lib/video"
 
 async function run() {
   // TODO download these
@@ -16,7 +16,7 @@ async function run() {
     "image-008.png",
   ].map((i) => path.join(mediaFolder, "images", i))
 
-  await render__wip(paths, instagramReelConfig)
+  await render(paths, instagramReelConfig, path.join(mediaFolder, "generated", "video-b.mp4"))
 }
 
 console.time("create-video")

@@ -19,16 +19,17 @@ export type FfmpegConfig = {
 }
 
 export const instagramReelConfig: IVideoConfig = Object.freeze({
-  audioFilePath: path.join(mediaFolder, "music/bensound-jazzyfrenchy.mp3"),
+  audioFilePath: path.join(__dirname, "../../media/music/bensound-jazzyfrenchy.mp3"),
   // total reel Duration in seconds
   desiredLength: 30,
   fps: 25,
   height: 1920,
   width: 1080,
+  logo: path.join(__dirname, "../../media/images/logo.png"),
 })
 
-// Calculates the duration in seconds of how long each of the provided images should be displayed for
-export const getImageDuration = (
+// Calculates the duration in seconds of how long each of the provided clips should be displayed for
+export const getClipDuration = (
   imagesCount: number,
   cfg: Pick<IVideoConfig, "desiredLength"> = instagramReelConfig,
 ): number => {
@@ -36,18 +37,20 @@ export const getImageDuration = (
 }
 
 function getFfmpegCommand(input: string, opts: FfmpegConfig): FfmpegCommand {
-  return ffmpeg()
-    .input(input)
-    .inputFPS(1 / getImageDuration(opts.imagesCount))
-    .size("800x500")
-    .output(opts.outputPath)
-    .outputFPS(opts.config.fps)
-    .noAudio()
+  return (
+    ffmpeg()
+      .input(input)
+      .inputFPS(1 / getClipDuration(opts.imagesCount))
+      // .size("800x500")
+      .output(opts.outputPath)
+      .outputFPS(opts.config.fps)
+      .noAudio()
+  )
 }
 
 export const ffmpegFrameNamePrefix = `image-`
 
-export const render = async (
+export const render__legacy = async (
   folder: string,
   config: Omit<FfmpegConfig, "input">,
 ): Promise<string> => {
@@ -73,32 +76,39 @@ export const render = async (
   })
 }
 
-/**
- * Renders using editly
- */
-export const render__wip = async (paths: string[], config: IVideoConfig) => {
-  const { audioFilePath, height, width, fps } = config
-  const clips: Clip[] = paths.map(
-    (path): Clip => ({
+export function createClips(paths: string[], config: IVideoConfig): Clip[] {
+  return paths.map((path): Clip => {
+    return {
       layers: [
         {
           type: "image",
           path,
-          duration: getImageDuration(paths.length, config),
+          duration: getClipDuration(paths.length, config),
         },
       ],
-    }),
-  )
+    }
+  })
+}
+
+/**
+ * Renders using editly
+ */
+export const render = async (
+  paths: string[],
+  config: IVideoConfig,
+  outPath: string,
+): Promise<string> => {
+  const { audioFilePath, height, width, fps } = config
 
   await editly({
     // see https://github.com/mifi/editly/blob/master/examples/commonFeatures.json5
     audioFilePath,
-    clips,
-    // TODO set to false in prod
-    fast: true,
+    clips: createClips(paths, config),
+    fast: false,
     fps,
     height,
-    outPath: path.join(mediaFolder, "generated", "video-b.mp4"),
+    outPath,
     width,
   })
+  return outPath
 }

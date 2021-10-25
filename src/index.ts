@@ -4,7 +4,7 @@ import path from "path"
 
 // Load env vars
 import loadConfig from "./lib/config"
-import { render, instagramReelConfig } from "./lib/video"
+import { render__legacy, instagramReelConfig } from "./lib/video"
 import { downloadToTempFolder } from "./lib/network"
 import { mediaFolder } from "./lib/storage"
 
@@ -31,7 +31,7 @@ export async function createServer() {
       imageUrls: urls,
     })
 
-    await render(folder, {
+    await render__legacy(folder, {
       soundtrack: path.join(mediaFolder, "music", "background-music-1.wav"),
       config: instagramReelConfig,
       imagesCount: urls.length,
