@@ -1,10 +1,14 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
+import editly, { Clip } from "editly"
+import path from "path"
+import { mediaFolder } from "./storage"
 
 export type IVideoConfig = {
   desiredLength: number
   fps: number
   height: number
   width: number
+  audioFilePath?: string
 }
 
 export type FfmpegConfig = {
@@ -15,8 +19,9 @@ export type FfmpegConfig = {
 }
 
 export const instagramReelConfig: IVideoConfig = Object.freeze({
-  // Duration expressed in milliseconds
-  desiredLength: 30000,
+  audioFilePath: path.join(mediaFolder, "music/bensound-jazzyfrenchy.mp3"),
+  // total reel Duration in seconds
+  desiredLength: 30,
   fps: 25,
   height: 1920,
   width: 1080,
@@ -27,7 +32,7 @@ export const getImageDuration = (
   imagesCount: number,
   cfg: Pick<IVideoConfig, "desiredLength"> = instagramReelConfig,
 ): number => {
-  return cfg.desiredLength / 1000 / imagesCount
+  return cfg.desiredLength / imagesCount
 }
 
 function getFfmpegCommand(input: string, opts: FfmpegConfig): FfmpegCommand {
@@ -65,5 +70,35 @@ export const render = async (
       console.error(e)
       reject()
     }
+  })
+}
+
+/**
+ * Renders using editly
+ */
+export const render__wip = async (paths: string[], config: IVideoConfig) => {
+  const { audioFilePath, height, width, fps } = config
+  const clips: Clip[] = paths.map(
+    (path): Clip => ({
+      layers: [
+        {
+          type: "image",
+          path,
+          duration: getImageDuration(paths.length, config),
+        },
+      ],
+    }),
+  )
+
+  await editly({
+    // see https://github.com/mifi/editly/blob/master/examples/commonFeatures.json5
+    audioFilePath,
+    clips,
+    // TODO set to false in prod
+    fast: true,
+    fps,
+    height,
+    outPath: path.join(mediaFolder, "generated", "video-b.mp4"),
+    width,
   })
 }
