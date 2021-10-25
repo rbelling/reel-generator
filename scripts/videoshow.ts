@@ -1,5 +1,5 @@
-import { mediaFolder } from "../src/lib/network"
 import * as path from "path"
+import { mediaFolder } from "../src/lib/storage"
 
 const videoshow = require("videoshow")
 

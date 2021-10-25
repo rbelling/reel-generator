@@ -5,7 +5,8 @@ import path from "path"
 // Load env vars
 import loadConfig from "./lib/config"
 import { render, instagramReelConfig } from "./lib/video"
-import { downloadToTempFolder, mediaFolder } from "./lib/network"
+import { downloadToTempFolder } from "./lib/network"
+import { mediaFolder } from "./lib/storage"
 
 loadConfig()
 

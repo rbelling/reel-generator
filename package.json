@@ -14,7 +14,7 @@
     "test:types": "tsc --noEmit",
     "test:coverage": "npm run test:unit -- --coverage",
     "test:watch": "npm run test:unit -- --watch --verbose",
-    "test:create-video": "ts-node scripts/createSampleVideo.ts",
+    "test:create-video": "ts-node scripts/videoshow.ts",
     "test:resize-image": "ffmpeg -i media/images/image-008.png -vf \"scale=w=1080:h=1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=#243746\" media/images/resized/image-008.png"
   },
   "repository": {

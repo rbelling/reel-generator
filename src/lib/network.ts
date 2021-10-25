@@ -1,7 +1,7 @@
 import Stream from "stream"
 import { SupportedImageExtension } from "./config"
 import axios from "axios"
-import { ISaveToFolder, saveImage } from "./storage"
+import { ISaveToFolder, mediaFolder, saveImage } from "./storage"
 import path from "path"
 import * as fs from "fs"
 import { v4 as uuidv4 } from "uuid"
@@ -10,8 +10,6 @@ type IDownloadToTempFolderResponse = {
   folder: string
   paths: Array<string>
 }
-
-export const mediaFolder = path.join(__dirname, "../../media")
 
 export async function fetchImageAsStream(
   url,

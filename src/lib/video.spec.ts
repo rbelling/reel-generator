@@ -1,4 +1,5 @@
-import { getExtensionFromFileName, getImageDuration, instagramReelConfig } from "./video"
+import { getImageDuration, instagramReelConfig } from "./video"
+import { getExtensionFromFileName } from "./storage"
 
 test("calculates duration of how long each frame should be displayed for (seconds)", () => {
   expect(getImageDuration(5, instagramReelConfig)).toBe(6)

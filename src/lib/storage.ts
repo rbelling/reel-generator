@@ -12,6 +12,25 @@ export type ISaveToFolder = {
   folder: string
 }
 
+export const mediaFolder = path.join(__dirname, "../../media")
+
+export function getExtensionFromFileName(fileName: string): {
+  fileName: string
+  extension: SupportedImageExtension
+} {
+  // Name without extension
+  const name = fileName.replace(/\.[^/.]+$/, "")
+  switch (true) {
+    case Boolean(fileName.match(/.png/)):
+      return { fileName: name, extension: ".png" }
+    case Boolean(fileName.match(/.jpg/)):
+      return { fileName: name, extension: ".jpg" }
+    case Boolean(fileName.match(/.jpeg/)):
+    default:
+      return { fileName: name, extension: ".jpeg" }
+  }
+}
+
 export async function writeStream(targetPath: string, data: Stream): Promise<void> {
   if (process.env.NODE_ENV === "test") return Promise.resolve()
   const writer = createWriteStream(targetPath)
