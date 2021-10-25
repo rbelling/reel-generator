@@ -1,4 +1,5 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
+import { SupportedImageExtension } from "./config"
 
 export type IVideoConfig = {
   desiredLength: number

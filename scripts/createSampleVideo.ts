@@ -4,16 +4,15 @@ import * as path from "path"
 const videoshow = require("videoshow")
 
 const images = [
-  "image-001.jpeg",
-  // "image-002.jpeg",
-  // "image-003.jpeg",
-  // "image-004.png",
-  // "image-005.png",
-  // "image-006.jpeg",
+  "image-004.png",
+  "image-005.png",
+  // "image-006.png",
   // "image-007.png",
   // "image-008.png",
-  "image-001.jpeg",
-].map((_) => path.join(mediaFolder, "images", _))
+  // "image-002.png",
+  // "image-003.png",
+  "image-001.png",
+].map((_) => path.join(mediaFolder, "images", "resized", _))
 
 const videoOptions = {
   fps: 25,
