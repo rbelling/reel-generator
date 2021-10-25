@@ -30,6 +30,22 @@ export const getImageDuration = (
   return cfg.desiredLength / 1000 / imagesCount
 }
 
+export function getExtensionFromFileName(fileName: string): {
+  fileName: string
+  extension: SupportedImageExtension
+} {
+  // Name without extension
+  const name = fileName.replace(/\.[^/.]+$/, "")
+  switch (true) {
+    case Boolean(fileName.match(/.png/)):
+      return { fileName: name, extension: ".png" }
+    case Boolean(fileName.match(/.jpg/)):
+      return { fileName: name, extension: ".jpg" }
+    case Boolean(fileName.match(/.jpeg/)):
+    default:
+      return { fileName: name, extension: ".jpeg" }
+  }
+}
 function getFfmpegCommand(input: string, opts: FfmpegConfig): FfmpegCommand {
   return ffmpeg()
     .input(input)
