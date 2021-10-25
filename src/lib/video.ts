@@ -19,7 +19,10 @@ export type FfmpegConfig = {
 }
 
 export const instagramReelConfig: IVideoConfig = Object.freeze({
-  audioFilePath: path.join(__dirname, "../../media/music/bensound-jazzyfrenchy.mp3"),
+  audioFilePath: path.join(
+    __dirname,
+    "../../media/music/The Polish Ambassador - The Juiceman Cometh ft. Saqi.mp3",
+  ),
   // total reel Duration in seconds
   desiredLength: 30,
   fps: 25,
