@@ -1,7 +1,6 @@
 import ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import editly, { Clip } from "editly"
 import path from "path"
-import { mediaFolder } from "./storage"
 
 export type IVideoConfig = {
   desiredLength: number
